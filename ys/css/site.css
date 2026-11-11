@@ -92,6 +92,11 @@
   .pager a, .pager span { background:var(--card); border:1px solid var(--line); padding:9px 17px; border-radius:999px; font-size:14px; }
   .pager a:hover { border-color:var(--accent); color:var(--accent); }
   .pager .on { background:var(--grad); border-color:transparent; color:#fff; font-weight:700; }
+  .pager-jump { display:inline-flex; gap:8px; align-items:center; margin:0; }
+  .pager-jump .pj-in { width:78px; background:var(--card); border:1px solid var(--line); padding:9px 10px; border-radius:999px; font-size:14px; text-align:center; color:var(--ink); outline:none; -moz-appearance:textfield; appearance:textfield; }
+  .pager-jump .pj-in::-webkit-outer-spin-button, .pager-jump .pj-in::-webkit-inner-spin-button { -webkit-appearance:none; margin:0; }
+  .pager-jump .pj-in:focus { border-color:var(--accent); }
+  .pager-jump .pj-btn { background:var(--grad); color:#fff; border:none; padding:9px 17px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; }
   .muted { color:var(--sub); }
   footer { background:var(--navy); margin-top:185px; }
   .fin { max-width:1180px; margin:0 auto; padding:30px 20px 0; position:relative; color:#A9BCD9; font-size:13px; line-height:1.9; display:flex; gap:24px; align-items:flex-end; }
