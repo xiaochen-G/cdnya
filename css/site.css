@@ -99,7 +99,7 @@
   .fin b { color:#fff; font-size:14px; }
   .fin nav { display:flex; gap:18px; margin:4px 0 8px; }
   .fin nav a:hover { color:#7FB3FF; }
-  .fin-mascot { height:178px; flex:none; display:block; }
+  .fin-mascot { width:252px; flex:none; display:block; }
   /* detail & play */
   .dcard { background:var(--card); border:1px solid var(--line); border-radius:24px; padding:26px; margin-top:26px; box-shadow:var(--shadow); }
   .dwrap { display:flex; gap:26px; flex-wrap:wrap; }
@@ -149,6 +149,6 @@
     .nf-code { font-size:60px; }
     .nf-mascot { height:88px; top:-48px; right:12px; }
     .bar nav { gap:14px; font-size:14px; }
-    .fin-mascot { height:108px; }
+    .fin-mascot { width:168px; }
     .fin { padding-top:22px; }
   }
