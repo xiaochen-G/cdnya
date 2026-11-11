@@ -1,0 +1,219 @@
+/* ============================================================
+   轻阅博客 · 玻璃拟态皮肤（参考图床 picbed 的 Apple-glass 设计）
+   站点级覆盖样式，主题文件不动。本文件在主题 bundle 之后加载。
+   ============================================================ */
+
+/* ---------- 光晕背景层：蓝 / 粉 / 紫三团柔光（与图床同款配色） ---------- */
+body {
+    background-color: #edf2f8;
+}
+body::before {
+    content: "";
+    position: fixed;
+    inset: -6%;
+    z-index: -1;
+    pointer-events: none;
+    background:
+        radial-gradient(480px 480px at 6% -4%, rgba(56, 189, 248, .50), rgba(56, 189, 248, 0) 70%),
+        radial-gradient(420px 420px at 97% -2%, rgba(244, 114, 182, .42), rgba(244, 114, 182, 0) 70%),
+        radial-gradient(520px 520px at 55% 106%, rgba(129, 140, 248, .40), rgba(129, 140, 248, 0) 70%);
+    filter: blur(36px);
+}
+
+/* ---------- 主题变量：把实心表面换成半透明，点缀色换成苹果蓝 ---------- */
+:root {
+    --bg-card: rgba(255, 255, 255, .55);
+    --bg-header: rgba(255, 255, 255, .55);
+    --bg-popover: rgba(255, 255, 255, .78);
+    --bg-input: rgba(255, 255, 255, .50);
+    --theme-color: #0071e3;
+    --text-link: #0071e3;
+    --border-main: rgba(31, 38, 135, .08);
+    --shadow-card: 0 8px 32px rgba(31, 38, 135, .08);
+}
+
+/* ---------- 动态卡片：玻璃面板 ---------- */
+.moment-card {
+    background: rgba(255, 255, 255, .50);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, .65);
+    border-bottom: 1px solid rgba(255, 255, 255, .65);
+    border-radius: 22px;
+    padding: 18px 16px 14px;
+    margin-bottom: 16px;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, .07), inset 0 1px 0 rgba(255, 255, 255, .6);
+}
+.moment-card:last-child { border-bottom: 1px solid rgba(255, 255, 255, .65); }
+
+/* ---------- 头像：圆角更柔和 ---------- */
+.avatar-img { border-radius: 12px; }
+.header-avatar img { border-radius: 18px; }
+
+/* ---------- 封面底部渐变罩：让右下角白色名字在浅色云海上也读得清 ---------- */
+.moments-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 42%, rgba(38, 32, 84, .42) 100%);
+    pointer-events: none;
+}
+.header-name { text-shadow: 0 1px 3px rgba(30, 27, 75, .55), 0 0 14px rgba(30, 27, 75, .28); }
+
+
+
+/* ---------- 个性签名：玻璃胶囊 ---------- */
+.header-signature {
+    margin: 28px 20px 6px;
+    padding: 10px 18px;
+    background: rgba(255, 255, 255, .45);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    backdrop-filter: blur(16px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, .6);
+    border-radius: 999px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .55);
+}
+
+/* 头像永远在签名胶囊之上：胶囊变高时也不许压住头像 */
+.header-avatar { position: relative; z-index: 3; }
+
+/* ---------- 顶栏：滚动后玻璃化（主题已有 blur，这里加强通透） ---------- */
+.home-header.scrolled,
+.single-header {
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, .5);
+}
+.header-search {
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, .6);
+    overflow: hidden;
+}
+.nav-btn {
+    background: rgba(255, 255, 255, .50);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, .6);
+    border-radius: 50%;
+}
+
+/* ---------- 全屏菜单：去掉原主题的黑色罩，换成与全站一致的粉蓝毛玻璃 ---------- */
+#menu-overlay {
+    background: linear-gradient(155deg, rgba(219, 240, 254, .80), rgba(252, 231, 243, .74) 52%, rgba(233, 238, 255, .84));
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    backdrop-filter: blur(24px) saturate(160%);
+}
+#menu-overlay .menu-link {
+    display: inline-block;
+    padding: 10px 26px;
+    background: rgba(255, 255, 255, .55);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, .75);
+    border-radius: 999px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .65), 0 6px 20px rgba(80, 90, 160, .12);
+    color: #1d1d1f;
+    opacity: 1;
+}
+#menu-overlay .menu-link:hover { color: #0071e3; }
+#menu-overlay .menu-link:active { background: rgba(0, 113, 227, .14); }
+[data-theme="dark"] #menu-overlay {
+    background: linear-gradient(155deg, rgba(28, 28, 46, .88), rgba(46, 38, 92, .84) 55%, rgba(24, 26, 48, .90));
+}
+[data-theme="dark"] #menu-overlay .menu-link {
+    background: rgba(255, 255, 255, .13);
+    border-color: rgba(255, 255, 255, .28);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .18), 0 6px 20px rgba(0, 0, 0, .30);
+    color: #f5f5f7;
+}
+[data-theme="dark"] #menu-overlay .menu-link:hover { color: #7dc4ff; }
+
+/* ---------- 页脚：玻璃条 ---------- */
+.site-footer {
+    margin: 6px 20px 22px;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, .45);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    backdrop-filter: blur(16px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, .6);
+    border-radius: 20px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .55);
+}
+
+/* ---------- Waline 评论区：跟着一起玻璃化 ---------- */
+#waline {
+    --waline-bg-color: rgba(255, 255, 255, .55);
+    --waline-bg-color-light: rgba(255, 255, 255, .35);
+    --waline-bg-color-hover: rgba(255, 255, 255, .68);
+    --waline-border-color: rgba(255, 255, 255, .65);
+    --waline-theme-color: #0071e3;
+    --waline-active-color: #0071e3;
+}
+#waline .wl-panel {
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    backdrop-filter: blur(16px) saturate(160%);
+    border-radius: 18px;
+}
+
+/* ---------- 深色模式 ---------- */
+[data-theme="dark"] {
+    --bg-card: rgba(30, 30, 36, .55);
+    --bg-header: rgba(30, 30, 36, .55);
+    --bg-popover: rgba(30, 30, 36, .82);
+    --bg-input: rgba(255, 255, 255, .08);
+    --theme-color: #0a84ff;
+    --text-link: #0a84ff;
+    --border-main: rgba(255, 255, 255, .10);
+    --shadow-card: 0 8px 32px rgba(0, 0, 0, .35);
+}
+[data-theme="dark"] body { background-color: #0c0f16; }
+[data-theme="dark"] body::before {
+    background:
+        radial-gradient(480px 480px at 6% -4%, rgba(56, 189, 248, .26), rgba(56, 189, 248, 0) 70%),
+        radial-gradient(420px 420px at 97% -2%, rgba(244, 114, 182, .20), rgba(244, 114, 182, 0) 70%),
+        radial-gradient(520px 520px at 55% 106%, rgba(129, 140, 248, .24), rgba(129, 140, 248, 0) 70%);
+}
+[data-theme="dark"] .moment-card {
+    background: rgba(30, 30, 36, .50);
+    border-color: rgba(255, 255, 255, .14);
+    border-bottom-color: rgba(255, 255, 255, .14);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+[data-theme="dark"] .moment-card:last-child { border-bottom-color: rgba(255, 255, 255, .14); }
+[data-theme="dark"] .header-signature,
+[data-theme="dark"] .site-footer {
+    background: rgba(30, 30, 36, .45);
+    border-color: rgba(255, 255, 255, .14);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+[data-theme="dark"] .home-header.scrolled,
+[data-theme="dark"] .single-header { border-bottom-color: rgba(255, 255, 255, .12); }
+[data-theme="dark"] .header-search,
+[data-theme="dark"] .nav-btn {
+    background: rgba(30, 30, 36, .50);
+    border-color: rgba(255, 255, 255, .14);
+}
+[data-theme="dark"] #waline {
+    --waline-bg-color: rgba(30, 30, 36, .55);
+    --waline-bg-color-light: rgba(30, 30, 36, .35);
+    --waline-bg-color-hover: rgba(30, 30, 36, .68);
+    --waline-border-color: rgba(255, 255, 255, .16);
+    --waline-theme-color: #0a84ff;
+    --waline-active-color: #0a84ff;
+}
+
+/* ---------- 不支持 backdrop-filter 时退回近不透明，保证可读 ---------- */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .moment-card { background: rgba(255, 255, 255, .94); }
+    .header-signature, .site-footer { background: rgba(255, 255, 255, .92); }
+    [data-theme="dark"] .moment-card { background: rgba(30, 30, 36, .94); }
+    [data-theme="dark"] .header-signature,
+    [data-theme="dark"] .site-footer { background: rgba(30, 30, 36, .92); }
+}
+
+/* B站嵌入：手机端信息流里全宽展示，避免播放器被主题的 85% 宽度上限压窄（B站播放器一窄，进度条等控件会挤到画面中间） */
+@media (max-width: 820px) {
+  .moments-feed .moment-text.has-video .amigo-video-container.amigo-video-bilibili {
+    max-width: 100%;
+  }
+}

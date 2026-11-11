@@ -1,0 +1,211 @@
+/* ============================================================
+   轻阅博客 · 宽屏与细节打磨（2026-11-04，回应论坛网友反馈）
+   站点级覆盖样式，在 glass.css 之后加载，主题文件不动。
+   1) 全屏菜单：胶囊等宽 + 文本居中（网友一）
+   2) 小圆角统一：配图/代码块等从 3~4px 提到 10~12px（网友一）
+   3) 平板/电脑端主页加宽 + 两侧玻璃面板（网友二）；手机端完全不动
+   ============================================================ */
+
+/* ---------- 1) 全屏菜单居中 ---------- */
+/* 原问题：胶囊里的 ::after 下划线占位让文字视觉上偏上，
+   且每个胶囊宽度随文字长短变化，整列看起来不齐。 */
+#menu-overlay .menu-nav li {
+    display: flex;
+    justify-content: center;
+}
+#menu-overlay .menu-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-width: 196px;
+    line-height: 1.2;
+}
+#menu-overlay .menu-link::after {
+    display: none;
+}
+
+/* ---------- 2) 圆角统一打磨 ---------- */
+.moment-gallery .gallery-single img,
+.moment-gallery .gallery-item,
+.article-text img {
+    border-radius: 12px;
+}
+.moment-gallery .gallery-item { overflow: hidden; }
+.moment-gallery .gallery-item img { border-radius: 0; }
+.long-card-thumb img { border-radius: 10px; }
+.moment-livephotos .live-photo,
+.moments-feed .live-photo { --border-radius: 12px; }
+.article-text pre,
+.moment-text pre { border-radius: 12px; }
+.header-search #home-search-clear { border-radius: 999px; }
+
+/* ---------- 3) 主页加宽（仅 ≥768px，手机端保持原样） ---------- */
+/* 只作用于带朋友圈信息流的主页（:has(.moments-feed)），文章页维持原阅读宽度 */
+@media (min-width: 768px) {
+    .main-wrapper:has(.moments-feed:not(.single-view)) { max-width: 800px; }
+    .main-wrapper:has(.moments-feed:not(.single-view)) .moments-header { height: 264px; }
+}
+@media (min-width: 1024px) {
+    .main-wrapper:has(.moments-feed:not(.single-view)) { max-width: 880px; }
+    .main-wrapper:has(.moments-feed:not(.single-view)) .moments-header { height: 300px; }
+}
+@media (min-width: 1680px) {
+    .main-wrapper:has(.moments-feed:not(.single-view)) { max-width: 960px; }
+    .main-wrapper:has(.moments-feed:not(.single-view)) .moments-header { height: 330px; }
+}
+
+/* ---------- 两侧玻璃面板（主页与文章页、仅 ≥1440px 由 JS 注入并显示） ---------- */
+/* 结构：.side-stack 是固定定位的竖排容器，.side-panel 是里面的每张玻璃卡 */
+.side-stack, .side-panel {
+    display: none;
+}
+@media (min-width: 1440px) {
+    .side-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        position: fixed;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 216px;
+        z-index: 40;
+    }
+    .side-stack-left  { left:  calc(50% - 676px); }  /* 440(半个主页)+20(间距)+216(面板宽) */
+    .side-stack-right { right: calc(50% - 676px); }
+    .side-panel {
+        display: block;
+        padding: 20px 18px;
+        background: rgba(255, 255, 255, .50);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        backdrop-filter: blur(20px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, .65);
+        border-radius: 22px;
+        box-shadow: 0 8px 32px rgba(31, 38, 135, .08), inset 0 1px 0 rgba(255, 255, 255, .6);
+        color: var(--text-main);
+    }
+}
+@media (min-width: 1680px) {
+    .side-stack-left  { left:  calc(50% - 716px); }  /* 主页加宽到 960 后同步外移 */
+    .side-stack-right { right: calc(50% - 716px); }
+}
+/* 文章页内容列维持 680px，面板按 680 算偏移（340+20+216=576），与屏幕宽度无关；
+   双类选择器优先级高于上面按主页宽度写的两组规则，1680 以上也不会被覆盖回去 */
+@media (min-width: 1440px) {
+    .side-stack-left.on-article  { left:  calc(50% - 576px); }
+    .side-stack-right.on-article { right: calc(50% - 576px); }
+}
+
+/* ---------- 页脚「我的站点」文字链接（<1440px 显示；宽屏由两侧顺手入口面板接管） ---------- */
+.footer-sites {
+    margin-bottom: 8px;
+    font-size: 13px;
+    line-height: 1.9;
+    color: var(--text-sub, #8a8a8e);
+}
+.footer-sites .fs-title { font-weight: 700; color: var(--text-main); margin-right: 6px; }
+.footer-sites a { color: inherit; text-decoration: none; }
+.footer-sites a:active { color: #0071e3; }
+.footer-sites .fs-dot { margin: 0 7px; opacity: .55; }
+@media (min-width: 1440px) {
+    .footer-sites { display: none; }
+}
+
+/* 欢迎卡片（左栏第二张）：访客位置 / IP / 设备 */
+.side-panel .sp-whello {
+    font-size: 14.5px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+.side-panel .sp-wrow {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    font-size: 12.5px;
+    line-height: 1.5;
+}
+.side-panel .sp-wrow .sp-wk {
+    flex-shrink: 0;
+    color: var(--text-desc, #666);
+}
+.side-panel .sp-wrow .sp-wv {
+    word-break: break-all;
+}
+
+.side-panel .sp-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    object-fit: cover;
+    display: block;
+    margin: 2px auto 10px;
+}
+.side-panel .sp-name {
+    text-align: center;
+    font-size: 17px;
+    font-weight: 700;
+}
+.side-panel .sp-desc {
+    text-align: center;
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--text-desc, #666);
+    margin-top: 5px;
+}
+.side-panel .sp-stats {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    margin-top: 14px;
+    padding-top: 13px;
+    border-top: 1px solid rgba(31, 38, 135, .08);
+    text-align: center;
+}
+.side-panel .sp-stats b { display: block; font-size: 16px; }
+.side-panel .sp-stats span { font-size: 11.5px; color: var(--text-desc, #666); }
+.side-panel .sp-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    margin-bottom: 10px;
+}
+.side-panel .sp-link {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 12px;
+    margin-bottom: 8px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, .45);
+    border: 1px solid rgba(255, 255, 255, .55);
+    color: var(--text-main);
+    text-decoration: none;
+    font-size: 13.5px;
+    transition: background .2s ease, transform .2s ease;
+}
+.side-panel .sp-link:hover { background: rgba(255, 255, 255, .75); transform: translateY(-1px); }
+.side-panel .sp-link i { font-size: 16px; color: #0071e3; }
+.side-panel .sp-date {
+    margin-top: 13px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(31, 38, 135, .08);
+    font-size: 12.5px;
+    color: var(--text-desc, #666);
+    text-align: center;
+}
+
+/* 深色模式 */
+[data-theme="dark"] .side-panel {
+    background: rgba(30, 30, 36, .50);
+    border-color: rgba(255, 255, 255, .14);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+[data-theme="dark"] .side-panel .sp-stats,
+[data-theme="dark"] .side-panel .sp-date { border-top-color: rgba(255, 255, 255, .10); }
+[data-theme="dark"] .side-panel .sp-link {
+    background: rgba(255, 255, 255, .06);
+    border-color: rgba(255, 255, 255, .10);
+}
+[data-theme="dark"] .side-panel .sp-link:hover { background: rgba(255, 255, 255, .12); }
+[data-theme="dark"] .side-panel .sp-link i { color: #0a84ff; }
+
