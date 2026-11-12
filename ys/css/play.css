@@ -47,3 +47,7 @@
 .pwrap:fullscreen video{flex:1;min-height:0;height:auto}
 .pwrap.webfull{display:flex;flex-direction:column}
 .pwrap.webfull video{flex:1;min-height:0;height:auto}
+
+.rm-card .rm-modes{display:flex;gap:8px;margin:10px 0 2px}
+.rm-card .rm-mode{flex:1;padding:9px 0;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--sub);font-size:14px;font-weight:700;cursor:pointer}
+.rm-card .rm-mode.on{background:var(--grad);color:#fff;border-color:transparent}

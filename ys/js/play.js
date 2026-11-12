@@ -256,7 +256,13 @@
   // ---- join / main panels ----
   var joinBox = document.getElementById('roomJoin');
   var mainBox = document.getElementById('roomMain');
-  function showJoin() { joinBox.style.display = 'block'; mainBox.style.display = 'none'; }
+  function showJoin() {
+    joinBox.style.display = 'block'; mainBox.style.display = 'none';
+    fetch('/room/status?room=' + encodeURIComponent(roomId)).then(function (r) { return r.json(); }).then(function (st) {
+      var p = document.getElementById('rjPass');
+      if (p) p.style.display = (st && st.exists && st.nopass) ? 'none' : '';
+    }).catch(function () {});
+  }
   function showMain() { joinBox.style.display = 'none'; mainBox.style.display = 'block'; }
   var jNick = document.getElementById('rjNick');
   try { jNick.value = localStorage.getItem('vsnick') || ''; } catch (e) {}
@@ -330,6 +336,14 @@
   var pass = document.getElementById('rmPass');
   var err = document.getElementById('rmErr');
   if (!btn || !form || !nick || !pass || !err || !vid) return;
+  var modeFree = document.getElementById('rmModeFree');
+  var modePass = document.getElementById('rmModePass');
+  var passWrap = document.getElementById('rmPassWrap');
+  var passMode = false;
+  if (modeFree && modePass && passWrap) {
+    modeFree.onclick = function () { passMode = false; modeFree.className = 'rm-mode on'; modePass.className = 'rm-mode'; passWrap.style.display = 'none'; };
+    modePass.onclick = function () { passMode = true; modePass.className = 'rm-mode on'; modeFree.className = 'rm-mode'; passWrap.style.display = 'block'; try { pass.focus(); } catch (e) {} };
+  }
   try { nick.value = localStorage.getItem('vsnick') || ''; } catch (e) {}
   btn.onclick = function () { form.style.display = 'block'; btn.style.display = 'none'; };
   document.getElementById('rmGo').onclick = function () {
@@ -337,7 +351,7 @@
     var body = new URLSearchParams();
     body.set('video_id', vid);
     body.set('nick', nick.value);
-    body.set('password', pass.value);
+    body.set('password', passMode ? pass.value : '');
     fetch('/room/create', { method: 'POST', body: body }).then(function (r) {
       return r.json().then(function (j) { return { ok: r.ok, j: j }; });
     }).then(function (res) {
