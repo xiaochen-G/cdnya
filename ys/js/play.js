@@ -385,6 +385,8 @@
   function teardown() {
     if (torn) return;
     torn = true;
+    if (window.__hlsAp) { try { window.__hlsAp.destroy(); } catch (e) {} window.__hlsAp = null; }
+    if (window.__art) { try { window.__art.destroy(); } catch (e) {} window.__art = null; }
     var video = document.getElementById('player');
     if (!video) return;
     try { video.pause(); } catch (e) {}
