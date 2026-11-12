@@ -58,11 +58,19 @@
   var eps = document.querySelectorAll('.eps a');
   for (var i = 0; i < eps.length; i++) { eps[i].href += '&room=' + encodeURIComponent(roomId); }
 
-  var ws = null, role = 'member', myNick = '', leftFlag = false, retryN = 0;
+  var ws = null, role = 'member', myNick = '', leftFlag = false, retryN = 0, navAway = false;
   var statusEl = document.getElementById('rmStatus');
   var countEl = document.getElementById('rmCount');
   var chatList = document.getElementById('chatList');
   var tokenKey = 'vsrt:' + roomId;
+  // Navigating away from the page: close the socket for good (no
+  // reconnect dance during unload). The seat itself stays reserved
+  // server-side for 10 minutes, so returning via the room link
+  // still reattaches.
+  window.addEventListener('pagehide', function () {
+    navAway = true;
+    try { if (ws) ws.close(); } catch (e) {}
+  });
 
   function token() { try { return sessionStorage.getItem(tokenKey) || ''; } catch (e) { return ''; } }
   function setToken(t) { try { sessionStorage.setItem(tokenKey, t); } catch (e) {} }
@@ -233,7 +241,7 @@
       }
     };
     ws.onclose = function (ev) {
-      if (leftFlag) return;
+      if (leftFlag || navAway) return;
       if (ev && ev.code === 4000) {
         leftFlag = true;
         setStatus('房间已在另一个页面打开，已停止重连（关掉多余的页面即可）', false);
@@ -363,4 +371,48 @@
       location.href = '/play?id=' + vid + '&s=0&e=0&room=' + res.j.room;
     }).catch(function () { err.textContent = '网络错误，请重试'; });
   };
+})();
+
+// ---- leave-page player teardown ----
+// After long playback, tapping an in-site link felt stuck: the
+// browser had to dismantle a live decoder, an MSE pipeline and
+// ongoing segment downloads before it could render the next page.
+// Tear the player down the moment a navigation link is tapped
+// (and again on pagehide, for back-gesture exits), so leaving is
+// instant. Teardown never blocks the navigation itself.
+(function () {
+  var torn = false;
+  function teardown() {
+    if (torn) return;
+    torn = true;
+    var video = document.getElementById('player');
+    if (!video) return;
+    try { video.pause(); } catch (e) {}
+    try {
+      var src = video.currentSrc || video.src || '';
+      if (src.indexOf('blob:') === 0 && window.URL && URL.revokeObjectURL) {
+        URL.revokeObjectURL(src);
+      }
+    } catch (e) {}
+    try { video.removeAttribute('src'); video.load(); } catch (e) {}
+  }
+  function findAnchor(el) {
+    while (el && el !== document) {
+      if (el.tagName === 'A' && el.getAttribute('href')) return el;
+      el = el.parentNode;
+    }
+    return null;
+  }
+  document.addEventListener('click', function (ev) {
+    if (ev.defaultPrevented || ev.button !== 0 || ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return;
+    var a = findAnchor(ev.target);
+    if (!a) return;
+    if (a.target && a.target !== '_self') return;
+    var href = a.getAttribute('href');
+    if (!href || href.charAt(0) === '#') return;
+    var origin = location.protocol + '//' + location.host;
+    if (href.indexOf('http') === 0 && href.indexOf(origin) !== 0) return;
+    teardown();
+  }, true);
+  window.addEventListener('pagehide', teardown);
 })();
