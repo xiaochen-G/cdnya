@@ -43,10 +43,22 @@
   panel.style.display = 'block';
   var dmLayer = document.getElementById('dmLayer');
   dmLayer.style.display = 'block';
+  var dmStrip = document.getElementById('dmStrip');
+  var dmToggleBtn = document.getElementById('rmDmToggle');
+  var dmMode = 'overlay';
+  try { dmMode = localStorage.getItem('vsdm') || 'overlay'; } catch (e) {}
+  if (dmMode !== 'overlay' && dmMode !== 'strip' && dmMode !== 'off') dmMode = 'overlay';
+  function applyDmMode() {
+    if (dmToggleBtn) dmToggleBtn.textContent = dmMode === 'overlay' ? '弹幕：画面' : (dmMode === 'strip' ? '弹幕：下条' : '弹幕：关');
+    if (dmStrip) dmStrip.style.display = dmMode === 'strip' ? 'block' : 'none';
+    if (dmMode !== 'overlay') dmLayer.innerHTML = '';
+    if (dmMode !== 'strip' && dmStrip) dmStrip.innerHTML = '';
+    try { localStorage.setItem('vsdm', dmMode); } catch (e) {}
+  }
   var eps = document.querySelectorAll('.eps a');
   for (var i = 0; i < eps.length; i++) { eps[i].href += '&room=' + encodeURIComponent(roomId); }
 
-  var ws = null, role = 'member', myNick = '', dmOn = true, leftFlag = false, retryN = 0;
+  var ws = null, role = 'member', myNick = '', leftFlag = false, retryN = 0;
   var statusEl = document.getElementById('rmStatus');
   var countEl = document.getElementById('rmCount');
   var chatList = document.getElementById('chatList');
@@ -94,8 +106,33 @@
     while (tracks.length < n) tracks.push(0);
     return n;
   }
+  var stripBusyUntil = 0, activeStrip = 0;
+  function spawnStrip(text, self) {
+    if (!dmStrip || !dmStrip.clientWidth || activeStrip >= 6) return;
+    var now = Date.now();
+    if (now < stripBusyUntil) return; // single lane: wait for a gap
+    var el = document.createElement('span');
+    el.className = 'dm' + (self ? ' dm-self' : '');
+    el.textContent = text;
+    el.style.fontSize = '14px';
+    el.style.top = '7px';
+    el.style.left = dmStrip.clientWidth + 'px';
+    dmStrip.appendChild(el);
+    var w = el.offsetWidth || (text.length * 14);
+    var total = dmStrip.clientWidth + w + 30;
+    var dur = Math.max(3500, Math.round(total / 0.11));
+    stripBusyUntil = now + (w + 60) / (total / dur);
+    activeStrip++;
+    el.style.transition = 'transform ' + dur + 'ms linear';
+    el.style.transform = 'translateX(0px)';
+    void el.offsetWidth;
+    el.style.transform = 'translateX(-' + total + 'px)';
+    setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); activeStrip--; }, dur + 300);
+  }
   function spawnDm(text, self) {
-    if (!dmOn || activeDm >= 24 || !dmLayer.clientWidth) return;
+    if (dmMode === 'off') return;
+    if (dmMode === 'strip') { spawnStrip(text, self); return; }
+    if (activeDm >= 24 || !dmLayer.clientWidth) return;
     var n = dmTracks(), now = Date.now(), ti = -1;
     for (var i = 0; i < n; i++) { if (tracks[i] <= now) { ti = i; break; } }
     if (ti < 0) ti = Math.floor(Math.random() * n);
@@ -262,11 +299,11 @@
     try { sessionStorage.removeItem(tokenKey); } catch (e) {}
     location.href = '/play?id=' + myVid + '&s=' + myS + '&e=' + myE;
   };
-  document.getElementById('rmDmToggle').onclick = function () {
-    dmOn = !dmOn;
-    this.textContent = '弹幕：' + (dmOn ? '开' : '关');
-    if (!dmOn) dmLayer.innerHTML = '';
+  dmToggleBtn.onclick = function () {
+    dmMode = dmMode === 'overlay' ? 'strip' : (dmMode === 'strip' ? 'off' : 'overlay');
+    applyDmMode();
   };
+  applyDmMode();
   document.getElementById('rmCopy').onclick = function () {
     var url = location.href, btn = this;
     function done() { btn.textContent = '已复制 ✓'; setTimeout(function () { btn.textContent = '复制房间链接'; }, 1600); }
