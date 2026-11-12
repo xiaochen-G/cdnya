@@ -1,8 +1,6 @@
 .playflex{display:block}
 #roomPanel{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:var(--shadow);margin-top:16px;box-sizing:border-box}
 .pwrap{position:relative}
-#artMount{width:100%;aspect-ratio:16/9;background:#000}
-#artMount .art-video-player{width:100%;height:100%}
 #dmLayer{position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;z-index:5}
 .dm{position:absolute;white-space:nowrap;color:#fff;font-weight:700;text-shadow:0 1px 3px rgba(0,0,0,.75),0 0 2px rgba(0,0,0,.9);will-change:transform}
 .dm-self{color:#FFE45C}
