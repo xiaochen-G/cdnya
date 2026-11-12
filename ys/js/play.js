@@ -45,15 +45,15 @@
   dmLayer.style.display = 'block';
   var dmStrip = document.getElementById('dmStrip');
   var dmToggleBtn = document.getElementById('rmDmToggle');
-  var dmMode = 'overlay';
-  try { dmMode = localStorage.getItem('vsdm') || 'overlay'; } catch (e) {}
+  var dmMode = 'strip';
+  try { dmMode = localStorage.getItem('vsdm2') || 'strip'; } catch (e) {}
   if (dmMode !== 'overlay' && dmMode !== 'strip' && dmMode !== 'off') dmMode = 'overlay';
   function applyDmMode() {
     if (dmToggleBtn) dmToggleBtn.textContent = dmMode === 'overlay' ? '弹幕：画面' : (dmMode === 'strip' ? '弹幕：下条' : '弹幕：关');
     if (dmStrip) dmStrip.style.display = dmMode === 'strip' ? 'block' : 'none';
     if (dmMode !== 'overlay') dmLayer.innerHTML = '';
     if (dmMode !== 'strip' && dmStrip) dmStrip.innerHTML = '';
-    try { localStorage.setItem('vsdm', dmMode); } catch (e) {}
+    try { localStorage.setItem('vsdm2', dmMode); } catch (e) {}
   }
   var eps = document.querySelectorAll('.eps a');
   for (var i = 0; i < eps.length; i++) { eps[i].href += '&room=' + encodeURIComponent(roomId); }
@@ -224,7 +224,7 @@
       } else if (m.type === 'chat') {
         var self = (m.nick === myNick);
         addLine(m.nick, m.text, self);
-        spawnDm(m.text, self);
+        spawnDm(self ? '我：' + m.text : (m.nick + '：' + m.text), self);
       } else if (m.type === 'sync' || m.type === 'episode') {
         if (role !== 'host') applyState(m);
       } else if (m.type === 'host') {
