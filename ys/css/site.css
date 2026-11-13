@@ -22,6 +22,16 @@
   .bar nav a:hover { color:var(--accent); }
   .bar nav a.wuye-btn { background:var(--navy); color:#fff; padding:8px 16px; border-radius:999px; font-weight:700; font-size:14px; }
   .bar nav a.wuye-btn:hover { background:var(--grad); color:#fff; }
+  .hsearch { display:flex; gap:8px; flex:none; min-width:0; }
+  .hsearch input { width:168px; min-width:0; background:#F2F7FE; border:1px solid var(--line); border-radius:999px; padding:8px 14px; font-size:14px; color:var(--ink); outline:none; }
+  .hsearch input:focus { border-color:var(--accent); }
+  .hsearch button { background:var(--grad); color:#fff; border:0; border-radius:999px; padding:8px 18px; font-size:14px; font-weight:700; cursor:pointer; flex:none; }
+  .hsearch button:hover { filter:brightness(1.08); }
+  @media (max-width:900px){
+    .bar { flex-wrap:wrap; }
+    .hsearch { order:3; flex:1 1 100%; }
+    .hsearch input { flex:1; width:auto; }
+  }
   main { max-width:1180px; margin:0 auto; padding:0 20px 40px; }
   /* hero */
   .hero { position:relative; margin-top:26px; border-radius:28px; padding:38px 40px 34px; color:#fff;
