@@ -1,0 +1,10 @@
+.wuye-box { max-width:420px; margin:70px auto 30px; background:var(--card); border:1px solid var(--line); border-radius:24px; padding:34px 30px; text-align:center; }
+  .wuye-box .moon { font-size:40px; }
+  .wuye-box h1 { font-size:24px; font-weight:800; margin:12px 0 6px; }
+  .wuye-box p { color:var(--sub); font-size:14px; margin:0 0 20px; }
+  .wuye-box form { display:flex; gap:8px; }
+  .wuye-box input { flex:1; min-width:0; background:var(--chip); border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:15px; outline:none; }
+  .wuye-box input:focus { border-color:var(--accent); }
+  .wuye-box button { background:var(--grad); color:#fff; border:0; border-radius:999px; padding:12px 24px; font-size:15px; font-weight:700; cursor:pointer; box-shadow:0 6px 18px rgba(37,99,235,.30); }
+  .wuye-box button:hover { filter:brightness(1.06); }
+  .wuye-box .err { color:#DC2626; font-size:14px; margin-top:14px; }

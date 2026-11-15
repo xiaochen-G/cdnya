@@ -1,0 +1,1 @@
+function srcTab(b,i){var ps=document.querySelectorAll('.srcpanel');for(var j=0;j<ps.length;j++){ps[j].style.display=ps[j].getAttribute('data-s')==String(i)?'':'none';}var ts=b.parentNode.children;for(var k=0;k<ts.length;k++){ts[k].classList.toggle('on',ts[k]===b);}}function epsAll(b){var e=b.previousElementSibling;if(e){e.classList.remove('epsfold');}b.style.display='none';}
