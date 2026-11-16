@@ -149,7 +149,7 @@
 
     /* 链接表：[图标, 名称, 一句话（移动卡片用）, 地址]——宽屏面板与移动卡片共用 */
     var links = [
-        ['ri-image-line', '轻图床', '存图的地方', 'https://img.owo.name'],
+        ['ri-image-line', '轻图床', '存图的地方', 'https://img.qingyue.de'],
         ['ri-mail-line', '临时邮箱', '临时收信', 'https://mail.akali.cc.cd'],
         ['ri-video-download-line', '轻解析', '视频去水印', 'https://parse.kcdn.us.ci'],
         ['ri-chat-3-line', '弹幕接口', '播放器弹幕', 'https://danmu.cdnapi.us.ci'],
