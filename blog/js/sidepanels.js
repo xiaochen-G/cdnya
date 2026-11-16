@@ -153,7 +153,7 @@
         ['ri-mail-line', '临时邮箱', '临时收信', 'https://mail.akali.cc.cd'],
         ['ri-video-download-line', '轻解析', '视频去水印', 'https://parse.kcdn.us.ci'],
         ['ri-chat-3-line', '弹幕接口', '播放器弹幕', 'https://danmu.cdnapi.us.ci'],
-        ['ri-radar-line', '探针', '服务器监控', 'https://itz.us.ci'],
+        ['ri-radar-line', '探针', '服务器监控', 'https://itz.loc.cc'],
         ['ri-rss-line', 'RSS 订阅', '订阅本站', '/index.xml']
     ];
     links.forEach(function (item) {
