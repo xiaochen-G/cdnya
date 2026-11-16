@@ -71,7 +71,7 @@
             if (busy) return;
             busy = true;
             var wasVoted = hasVoted(path);
-            vote(path, wasVoted ? 'down' : 'up').then(function (n) {
+            vote(path, wasVoted ? 'desc' : 'inc').then(function (n) {
                 setVoted(path, !wasVoted);
                 busy = false;
                 render(n);
