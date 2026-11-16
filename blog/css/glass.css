@@ -217,3 +217,28 @@ body::before {
     max-width: 100%;
   }
 }
+
+/* 首页卡片点赞按钮（··· 左边，与 ··· 同款底色） */
+.feed-like {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-width: 32px;
+  height: 20px;
+  padding: 0 6px;
+  background: var(--bg-body);
+  color: var(--text-link);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+  transition: all 0.2s;
+}
+.feed-like i { font-size: 14px; }
+.feed-like:hover { background: var(--bg-active); }
+.feed-like.liked { color: #f44336; }
+.feed-like.liked i { color: #f44336; }
+.feed-like-count:empty { display: none; }
+[data-theme="dark"] .feed-like { background: var(--bg-input); }
