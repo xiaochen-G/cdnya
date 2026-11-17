@@ -49,21 +49,34 @@
         } catch (e) { /* 记不住就算了，计数以服务端为准 */ }
     }
 
-    function init(btn) {
+    function init(btn, defer) {
         var path = btn.getAttribute('data-path');
         if (!path) return;
         var icon = btn.querySelector('i');
         var countEl = btn.querySelector('.feed-like-count');
         var busy = false;
+        var count = null; // null = 还没查到计数
+        var loading = false;
 
-        function render(n) {
+        function render() {
             var v = hasVoted(path);
             btn.classList.toggle('liked', v);
             if (icon) icon.className = v ? 'ri-heart-3-fill' : 'ri-heart-line';
-            if (countEl) countEl.textContent = n > 0 ? String(n) : '';
+            if (countEl) countEl.textContent = (count !== null && count > 0) ? String(count) : '';
         }
 
-        getCount(path).then(render).catch(function () { /* 拿不到计数就只显示爱心 */ });
+        function load() {
+            if (loading || count !== null) return;
+            loading = true;
+            getCount(path).then(function (n) {
+                count = n;
+                render();
+            }).catch(function () { /* 拿不到计数就只显示爱心 */ });
+        }
+        btn.__loadLike = load;
+
+        render(); // 先按本地状态画爱心，计数等卡片快进视野时再查
+        if (!defer) load();
 
         btn.addEventListener('click', function (e) {
             e.preventDefault();
@@ -73,14 +86,31 @@
             var wasVoted = hasVoted(path);
             vote(path, wasVoted ? 'desc' : 'inc').then(function (n) {
                 setVoted(path, !wasVoted);
+                count = n;
                 busy = false;
-                render(n);
+                render();
             }).catch(function () { busy = false; });
         });
     }
 
     document.addEventListener('DOMContentLoaded', function () {
         var btns = document.querySelectorAll('.feed-like');
-        for (var i = 0; i < btns.length; i++) init(btns[i]);
+        var useIO = 'IntersectionObserver' in window;
+        var io = null;
+        if (useIO) {
+            io = new IntersectionObserver(function (entries) {
+                for (var j = 0; j < entries.length; j++) {
+                    if (entries[j].isIntersecting) {
+                        var b = entries[j].target;
+                        if (b.__loadLike) b.__loadLike();
+                        io.unobserve(b);
+                    }
+                }
+            }, { rootMargin: '300px' });
+        }
+        for (var i = 0; i < btns.length; i++) {
+            init(btns[i], useIO);
+            if (useIO) io.observe(btns[i]);
+        }
     });
 })();
