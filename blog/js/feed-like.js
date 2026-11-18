@@ -1,13 +1,11 @@
 /* 首页卡片点赞 — 每个 ··· 左边的独立点赞按钮
- * 与文章页点赞同一套 Waline article 接口（type=reaction0，按文章路径区分计数），
+ * 与文章页点赞同一套 /api/like 接口（博客自己的点赞服务，按文章路径区分计数），
  * 状态存 localStorage（feedLike:<path>），与 hearts.js 的实现方式一致。
  * 老内核兼容：不用 AbortController，超时用 Promise.race。 */
 (function () {
     'use strict';
 
-    var server = (window.__WALINE_SERVER__ || '').replace(/\/+$/, '');
-    if (!server) return;
-    var apiBase = server + '/api/article';
+    var apiBase = '/api/like';
 
     function fetchWithTimeout(url, options, ms) {
         var timeout = new Promise(function (resolve, reject) {

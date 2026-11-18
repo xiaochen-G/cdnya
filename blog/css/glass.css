@@ -242,3 +242,21 @@ body::before {
 .feed-like.liked i { color: #f44336; }
 .feed-like-count:empty { display: none; }
 [data-theme="dark"] .feed-like { background: var(--bg-input); }
+
+/* 文章页点赞（评论区上方，独立于 Waline） */
+.article-like {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 18px 0 6px;
+}
+.article-like .feed-like {
+  min-width: 44px;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 14px;
+  font-size: 13px;
+}
+.article-like .feed-like i { font-size: 16px; }
+.article-like-hint { font-size: 13px; color: var(--text-secondary, #999); }

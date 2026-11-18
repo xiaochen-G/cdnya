@@ -1,19 +1,16 @@
 /* tian hearts — 点击首页头像点亮爱心
  * - 点击 .header-avatar（或爱心小药丸）不再切换深浅色（导航栏还有专门的切换按钮），
- *   改为：大爱心弹出 + 小爱心上飘动画，并在 Waline 后端记一颗心。
- * - 计数与文章点赞同一套 Waline article 接口（type=reaction0，按页面路径区分），
- *   每位访客记一颗，再点一次取消；状态存 localStorage，与 Waline 官方行为一致。
+ *   改为：大爱心弹出 + 小爱心上飘动画，并在博客自己的点赞服务记一颗心。
+ * - 计数与文章点赞同一套 /api/like 接口（按页面路径区分），
+ *   每位访客记一颗，再点一次取消；状态存 localStorage。
  */
 (function () {
     'use strict';
 
-    var server = (window.__WALINE_SERVER__ || '').replace(/\/+$/, '');
-    if (!server) return;
-
     var path = window.location.pathname;
     var storeKey = 'tianHearts:' + path;
     var cacheKey = 'tianHeartsCount:' + path;
-    var apiBase = server + '/api/article';
+    var apiBase = '/api/like';
     var busy = false;
     var countLoading = false;
 
