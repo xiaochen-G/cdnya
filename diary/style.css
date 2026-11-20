@@ -43,6 +43,8 @@ a.card{display:block;text-decoration:none;color:inherit}
 .paper .card{background:transparent;border:none;box-shadow:none;border-radius:0;padding:0 2px;margin:0}
 .paper .meta{display:block;line-height:28px;margin:0;height:28px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .paper .card .meta + .meta{height:auto;min-height:28px;overflow:visible;white-space:normal}
+.paper .meta > *{margin-right:8px}
+.paper .meta > *:last-child{margin-right:0}
 .paper .card h2{line-height:28px;margin:0}
 .paper .empty{padding:22px 0}
 .dcard.paperpage{background-color:var(--paper);background-image:linear-gradient(to right,transparent 0 46px,var(--marginline) 46px,var(--marginline) 47px,transparent 47px);padding-left:60px}
