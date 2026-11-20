@@ -3,7 +3,7 @@ document.getElementById('entryForm').addEventListener('submit', function(ev){
   if(!input || !input.files || !input.files.length) return;
   var files = Array.prototype.slice.call(input.files);
   var need = false;
-  for (var i=0;i<files.length;i++){ if(files[i].type.indexOf('image/')===0 && files[i].size>4500000){ need=true; break; } }
+  for (var i=0;i<files.length;i++){ if(files[i].type.indexOf('image/')===0 && files[i].size>19000000){ need=true; break; } }
   if(!need) return;
   ev.preventDefault();
   var form = ev.target;
@@ -19,7 +19,7 @@ document.getElementById('entryForm').addEventListener('submit', function(ev){
 });
 function compressOne(f){
   return new Promise(function(resolve){
-    if(f.type.indexOf('image/')!==0 || f.size<=4500000){ resolve(f); return; }
+    if(f.type.indexOf('image/')!==0 || f.size<=19000000){ resolve(f); return; }
     var url = URL.createObjectURL(f);
     var img = new Image();
     img.onload = function(){
